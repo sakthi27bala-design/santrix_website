@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Santrix Kit — Smart Menstrual Care</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1: #fff6f7;
+      --rose-100: #ffeef0;
+      --rose-200: #ffd9dd;
+      --rose-400: #ff6f86; /* accent */
+      --rose-600: #c22b3a; /* dark Accent */
+      --muted: #6b6b6b;
+      --glass: rgba(255,255,255,0.65);
+      --glass-2: rgba(255, 255, 255, 0.85);
+      --card-shadow: 0 10px 30px rgba(18,18,20,0.06);
+      --glass-border: rgba(194,43,58,0.12);
+      --radius: 14px;
+      --max-width: 1200px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #fff6f7 0%, #fff 100%);
+      color:#111;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    /* NAV */
+    header.topbar{
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.45));
+      border-bottom: 1px solid rgba(194,43,58,0.05);
+      box-shadow: 0 6px 20px rgba(18,18,20,0.03);
+    }
+    .nav{
+      max-width:var(--max-width);
+      margin:0 auto;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      padding:14px 20px;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:10px;
+      display:grid;place-items:center;
+      background: linear-gradient(135deg, var(--rose-200), var(--rose-100));
+      box-shadow: 0 6px 18px rgba(194,43,58,0.08);
+      border:1px solid var(--glass-border);
+    }
+    .logo svg{width:26px;height:26px;fill:var(--rose-600)}
+    .brand h1{font-size:1.05rem;margin:0;font-weight:700;color:var(--rose-600)}
+    .brand p{margin:0;font-size:0.78rem;color:var(--muted); margin-left:2px}
+
+    nav ul{list-style:none;margin:0;padding:0;display:flex;gap:18px;align-items:center}
+    nav a{color:#222;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:8px;transition:all .18s}
+    nav a:hover{background:linear-gradient(90deg, rgba(194,43,58,0.06), rgba(255,111,134,0.04)); color:var(--rose-600)}
+
+    /* HERO */
+    .hero{
+      max-width:var(--max-width);
+      margin:28px auto 18px;
+      padding:34px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .hero-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,250,250,1));
+      border-radius:18px;
+      padding:30px;
+      box-shadow:var(--card-shadow);
+      border: 1px solid var(--glass-border);
+    }
+
+    .hero-title{
+      font-family: "Montserrat", "Inter", sans-serif;
+      font-size:1.6rem;
+      color:var(--rose-600);
+      margin-bottom:8px;
+      letter-spacing:0.2px;
+    }
+    .hero-sub{
+      color:#444; margin-bottom:16px; font-size:1rem;
+    }
+    .kpi{
+      display:flex; gap:12px; flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex; gap:10px;align-items:center;
+      background:linear-gradient(90deg,var(--rose-400),var(--rose-600));
+      color:white;padding:10px 14px;border-radius:10px;border:none;font-weight:700;
+      box-shadow: 0 6px 20px rgba(194,43,58,0.12); cursor:pointer;
+    }
+    .btn.ghost{
+      background:transparent;color:var(--rose-600);border:1px solid rgba(194,43,58,0.08);
+      box-shadow:none;font-weight:600;
+    }
+
+    .desc-box{
+      margin-top:18px;color:#444;font-size:0.95rem;
+      background: linear-gradient(90deg, rgba(254,241,242,0.6), rgba(255,255,255,0.6));
+      padding:14px;border-radius:12px;border:1px solid rgba(194,43,58,0.04);
+    }
+
+    /* DASHBOARD PANEL (right column) */
+    .panel{
+      display:grid;
+      gap:14px;
+      align-content:start;
+    }
+
+    .status-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,248,249,1));
+      border-radius:12px;padding:18px;border:1px solid rgba(194,43,58,0.06);
+      box-shadow: 0 8px 22px rgba(18,18,20,0.04);
+    }
+
+    .status-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .status-header h3{margin:0;font-size:0.95rem;color:var(--rose-600)}
+    .status-header small{color:var(--muted);font-size:0.82rem}
+
+    /* Circular progress cards */
+    .circle{
+      width:120px;height:120px;border-radius:999px;display:grid;place-items:center;
+      background:conic-gradient(var(--rose-400) var(--pct), #f3f3f3 0);
+      box-shadow: inset 0 -8px 20px rgba(0,0,0,0.03);
+      transition: background 0.7s ease;
+      border: 8px solid rgba(255,255,255,0.8);
+    }
+    .circle .num{font-weight:700;color:var(--rose-600);font-size:1.1rem}
+    .circle small{display:block;color:var(--muted);font-size:0.78rem}
+
+    .status-grid{
+      display:flex;gap:12px;align-items:center;justify-content:space-between;
+    }
+
+    .status-row{display:flex;gap:12px;align-items:center}
+    .stat-info{min-width:160px}
+    .stat-info h4{margin:0;color:#222;font-size:0.95rem}
+    .stat-info p{margin:6px 0 0;color:var(--muted);font-size:0.82rem}
+
+    /* FEATURES */
+    .features{
+      max-width:var(--max-width);
+      margin:18px auto;
+      padding:6px 20px 40px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+    }
+    .feature-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+    }
+
+    .feature{
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,246,246,0.9));
+      border-radius:12px;padding:18px;border:1px solid rgba(194,43,58,0.05);
+      box-shadow:var(--card-shadow);transition:transform .25s, box-shadow .25s;
+    }
+    .feature:hover{transform:translateY(-8px);box-shadow:0 18px 40px rgba(18,18,20,0.06)}
+    .feature h3{font-size:1rem;color:var(--rose-600);margin-bottom:8px}
+    .feature p{color:#444;font-size:0.9rem}
+
+    /* MISSION */
+    .mission{
+      max-width:var(--max-width);
+      margin:22px auto;
+      padding:28px 20px;
+      border-radius:16px;
+      background: linear-gradient(90deg,#fff7f8, #fffafc);
+      border:1px solid rgba(194,43,58,0.04);
+      box-shadow:var(--card-shadow);
+      display:flex;
+      gap:20px;align-items:center;justify-content:space-between;
+    }
+    .mission-left h2{margin:0;font-size:1.25rem;color:var(--rose-600)}
+    .mission-left p{color:#444;margin-top:8px}
+
+    .mission-cta{
+      background: linear-gradient(90deg,var(--rose-400),var(--rose-600));
+      color:white;padding:12px 16px;border-radius:12px;font-weight:700;border:none;
+      box-shadow:0 10px 28px rgba(194,43,58,0.12)
+    }
+
+    /* TEAM */
+    .team{
+      max-width:var(--max-width);
+      margin:18px auto 60px;padding:24px 20px;
+    }
+    .team-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;
+    }
+    .member{
+      background:linear-gradient(180deg,#fff,#fffaf9);
+      padding:18px;border-radius:14px;border:1px solid rgba(194,43,58,0.04);
+      display:flex;gap:12px;align-items:center;box-shadow:var(--card-shadow);transition:transform .25s;
+    }
+    .member:hover{transform:translateY(-8px)}
+    .avatar{
+      width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#fff0f1,#ffdbe0);
+      display:grid;place-items:center;font-weight:700;color:var(--rose-600);border-radius:12px;
+    }
+    .member h4{margin:0;color:#222;font-size:1rem}
+    .member p{margin:4px 0 0;color:var(--muted);font-size:0.85rem}
+    .feature-dashboard rect {
+    transform-origin: bottom;
+    transform: scaleY(0);
+    transition: transform 1s ease-out;
+  }
+  .feature-dashboard:hover rect {
+    transform: scaleY(1.1);
+    transition: transform 0.4s ease-in-out;
+  }
+
+  /* Eco disposal circle animation */
+  .feature-eco circle {
+    transform-origin: center;
+    transform: scale(0.8);
+    opacity: 0.7;
+    transition: transform 0.6s ease, opacity 0.6s ease;
+  }
+  .feature-eco:hover circle {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  /* Optional: subtle rotation on eco card */
+  .feature-eco svg {
+    transition: transform 2s linear;
+  }
+  .feature-eco:hover svg {
+    transform: rotate(10deg);
+  }
+
+    /* FOOTER */
+    footer{max-width:var(--max-width);margin:20px auto 60px;padding:18px;color:var(--muted);font-size:0.9rem;text-align:center}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns: 1fr; padding:18px}
+      nav ul{display:none}
+      .nav{padding:12px 14px}
+    }
+
+    @media (max-width:520px){
+      .circle{width:96px;height:96px}
+      .hero-card{padding:18px}
+      .mission{flex-direction:column;gap:12px}
+    }
+    .hero-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(18, 18, 20, 0.08);
+}
+.status-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.status-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(18, 18, 20, 0.08);
+}
+
+/* Circular charts lift */
+.circle {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.circle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(194,43,58,0.2);
+}
+.btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(194,43,58,0.18);
+}
+
+  </style>
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <div class="nav" role="navigation" aria-label="Main navigation">
+      <div class="brand" aria-hidden="false">
+        <div class="logo" aria-hidden="true">
+          <!-- simple drop icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 2C12 2 6 9 6 13a6 6 0 1 0 12 0c0-4-6-11-6-11z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Santrix Kit</h1>
+          <p>Smart Menstrual Care • AI · IoT · Eco</p>
+        </div>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#mission">Mission</a></li>
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO + DASHBOARD -->
+  <main>
+    <section class="hero" id="about" aria-labelledby="hero-heading">
+      <!-- Left column: intro -->
+      <div class="hero-card" role="region" aria-label="Project introduction">
+        <div class="hero-title" id="hero-heading">Santrix Kit — Clean. Connected. Caring.</div>
+        <div class="hero-sub">AI–IoT integrated system for automated sanitary pad dispensing, menstrual cycle awareness, health monitoring, and eco-safe disposal.</div>
+
+        <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+          <button class="btn" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">
+            Explore features
+          </button>
+          
+        </div>
+
+        <div class="desc-box" style="margin-top:18px">
+          <strong>Why Santrix?</strong> It unifies pad dispensing, contactless health vitals logging (pulse & temperature), inventory monitoring, and solar-assisted incineration — packaged in a sleek, low-maintenance unit for schools, hostels, and public restrooms.
+        </div>
+
+        <div style="margin-top:18px">
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(194,43,58,0.04);min-width:140px">
+              <div style="font-size:0.78rem;color:var(--muted)">Deployment</div>
+              <div style="font-weight:700;color:var(--rose-600)">Urban & Rural</div>
+            </div>
+            <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(194,43,58,0.04);min-width:140px">
+              <div style="font-size:0.78rem;color:var(--muted)">Power</div>
+              <div style="font-weight:700;color:var(--rose-600)">Solar + Mains</div>
+            </div>
+            <div style="background:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(194,43,58,0.04);min-width:140px">
+              <div style="font-size:0.78rem;color:var(--muted)">Alerts</div>
+              <div style="font-weight:700;color:var(--rose-600)">GSM SMS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: dashboard -->
+      <aside class="panel" role="complementary" aria-label="System dashboard">
+        <div class="status-card" aria-live="polite">
+          <div class="status-header">
+            <h3>System Status</h3>
+            <small>Realtime • Connected</small>
+          </div>
+
+          <div class="status-grid">
+            <!-- Pad stock -->
+            <div style="display:flex;gap:12px;align-items:center">
+              <div id="padCircle" class="circle" style="--pct: 0deg">
+                <div style="text-align:center">
+                  <div class="num" id="padPct">0%</div>
+                  <small>Pad stock</small>
+                </div>
+              </div>
+              <div class="stat-info">
+                <h4>Pad Inventory</h4>
+                <p id="padCount">Loading...</p>
+              </div>
+            </div>
+
+            <!-- Bin fill -->
+            <div style="display:flex;gap:12px;align-items:center">
+              <div id="binCircle" class="circle" style="--pct: 0deg">
+                <div style="text-align:center">
+                  <div class="num" id="binPct">0%</div>
+                  <small>Bin fill</small>
+                </div>
+              </div>
+              <div class="stat-info">
+                <h4>Waste Bin</h4>
+                <p id="binText">Loading...</p>
+              </div>
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px dashed rgba(0,0,0,0.04);margin:14px 0">
+
+          <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+            <div>
+              <h4>Power Mode</h4>
+              <p id="powerMode" style="color:var(--muted)">Detecting...</p>
+            </div>
+            <div style="text-align:right">
+              <h4>System Health</h4>
+              <p id="sysHealth" style="color:var(--muted)">—</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-card" style="display:flex;flex-direction:column;gap:10px">
+          <div class="status-header">
+            <h3>User Vitals</h3>
+            <small>During pad access</small>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+            <div>
+              <h4 style="margin:0">Pulse</h4>
+              <p id="pulse" style="color:var(--muted)">— bpm</p>
+            </div>
+            <div>
+              <h4 style="margin:0">Temp</h4>
+              <p id="temp" style="color:var(--muted)">— °C</p>
+            </div>
+            <div>
+              <h4 style="margin:0">Last log</h4>
+              <p id="lastLog" style="color:var(--muted)">—</p>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </section>
+
+   <section id="features" class="features" aria-labelledby="features-heading">
+  <!-- Left side: text + features -->
+  <div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <h2 id="features-heading" style="margin:0;color:var(--rose-600)">Key Features</h2>
+      <span style="font-size:0.85rem;color:var(--muted)">Intelligent • Touchless • Eco</span>
+    </div>
+    <p style="color:#444;max-width:760px;margin-bottom:18px">
+      Santrix blends hardware and software to make menstrual care safer, smarter, and sustainable. Below are the core capabilities that define the system.
+    </p>
+
+    <div class="feature-grid" role="list">
+      <!-- Your existing feature cards -->
+      <article class="feature" role="listitem">
+        <h3>RFID & Public Modes</h3>
+        <p>Secure registered-user dispensing plus an emergency public-access button—both touch-free.</p>
+      </article>
+      <article class="feature" role="listitem">
+        <h3>Inventory & Waste Monitoring</h3>
+        <p>Infrared/ultrasonic sensors track pad stock and bin fill; automated GSM alerts for maintenance.</p>
+      </article>
+      <article class="feature" role="listitem">
+        <h3>Solar-Electric Incineration</h3>
+        <p>Solar-backed heater converts used pads into sterile ash; filtration system limits emissions.</p>
+      </article>
+      <article class="feature" role="listitem">
+        <h3>Health Vitals Logging</h3>
+        <p>Pulse and temperature capture during access for menstrual health insights (optional & private).</p>
+      </article>
+      <article class="feature" role="listitem">
+        <h3>Low-Maintenance Design</h3>
+        <p>Modular enclosure, removable ash tray and easy PCB/service access for field maintenance.</p>
+      </article>
+      <article class="feature" role="listitem">
+        <h3>GSM Alerts & Logging</h3>
+        <p>Automatic SMS to staff for restocking and servicing; on-device logs for audit and analytics.</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Right side: interactive/animated illustration -->
+  <div style="display:flex;flex-direction:column;gap:18px;justify-content:center;align-items:center;">
+    <!-- Dashboard mockup -->
+    <!-- Dashboard card -->
+<div class="hero-card feature-dashboard" style="width:100%; max-width:360px; text-align:center;">
+  <div style="font-weight:700;color:var(--rose-600); margin-bottom:6px;">Interactive Dashboard</div>
+  <svg width="280" height="140" viewBox="0 0 280 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="20" width="60" height="80" rx="6" fill="#FFD9DD"/>
+    <rect x="80" y="40" width="60" height="60" rx="6" fill="#FF6F86"/>
+    <rect x="150" y="30" width="60" height="70" rx="6" fill="#C22B3A"/>
+  </svg>
+  <div style="color:#444; font-size:0.9rem; margin-top:8px;">Monitor pad stock, bin fill, and user vitals in real-time.</div>
+</div>
+
+<!-- Eco disposal card -->
+<div class="hero-card feature-eco" style="width:100%; max-width:360px; text-align:center;">
+  <div style="font-weight:700;color:var(--rose-600); margin-bottom:6px;">Eco Disposal</div>
+  <svg width="280" height="140" viewBox="0 0 280 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="70" r="30" fill="#FF6F86"/>
+    <rect x="120" y="50" width="80" height="40" rx="6" fill="#FFD9DD"/>
+    <path d="M210 100 L230 80 L250 100" stroke="#C22B3A" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <div style="color:#444; font-size:0.9rem; margin-top:8px;">Solar-assisted incineration ensures safe and odor-free disposal.</div>
+</div>
+
+  </div>
+</section>
+
+
+    <!-- MISSION -->
+    <section id="mission" class="mission" aria-labelledby="mission-heading">
+      <div class="mission-left">
+        <h2 id="mission-heading">Mission</h2>
+        <p>To make menstrual hygiene accessible, dignified, and eco-friendly by combining intelligent automation with a low-power, solar-ready hardware platform.</p>
+      </div>
+
+      <div style="text-align:right">
+        <div style="font-size:0.95rem;color:var(--muted);margin-bottom:10px">Prototype by</div>
+        <div style="font-weight:700;color:var(--rose-600)">Santrix Project Team — IFET College</div>
+        <div style="margin-top:12px">
+          <button class="mission-cta" onclick="alert('Thanks — demo contact placeholder')">Request Demo</button>
+        </div>
+      </div>
+    </section>
+
+
+    <footer>
+      © 2025 Santrix Project Team • IFET College of Engineering • Villupuram — Built with ❤️ for menstrual dignity & sustainability
+    </footer>
+  </main>
+
+  <!-- Small JS: animates dashboard and provides interactive demo values -->
+  <script>
+    // Demo values (replace with live API / device data)
+    const demo = {
+      padPct: 72,     // pad stock percent
+      padCount: 21,   // number of pads
+      binPct: 28,     // waste bin fill percent
+      powerMode: "Solar (charging)", // or "Mains"
+      sysHealth: 94,  // out of 100
+      pulse: 78,      // bpm
+      temp: 36.6,     // C
+      lastLog: "2 min ago"
+    };
+
+    // helper to animate numeric counters
+    function animateValue(id, start, end, duration, suffix='') {
+      const el = document.getElementById(id);
+      if(!el) return;
+      const range = end - start;
+      let startTime = null;
+      function step(timestamp){
+        if(!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const value = Math.round(start + range * progress);
+        el.textContent = value + suffix;
+        if(progress < 1) window.requestAnimationFrame(step);
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    // update circular progress using CSS custom property for conic gradient degrees
+    function setCirclePct(elementId, percent) {
+      const el = document.getElementById(elementId);
+      if(!el) return;
+      const deg = Math.round((percent/100) * 360);
+      el.style.setProperty('--pct', deg + 'deg');
+    }
+
+    // set initial demo values with animations
+    window.addEventListener('load', () => {
+      // animate pad pct & count
+      animateValue('padPct', 0, demo.padPct, 900);
+      document.getElementById('padCount').textContent = demo.padCount + " pads available";
+      setTimeout(()=> setCirclePct('padCircle', demo.padPct), 80);
+
+      // bin
+      animateValue('binPct', 0, demo.binPct, 900);
+      document.getElementById('binText').textContent = (demo.binPct < 75) ? "Normal" : "Requires attention";
+      setTimeout(()=> setCirclePct('binCircle', demo.binPct), 80);
+
+      // power & health & vitals
+      document.getElementById('powerMode').textContent = demo.powerMode;
+      animateValue('sysHealth', 0, demo.sysHealth, 1000, '%');
+      animateValue('pulse', 60, demo.pulse, 700, ' bpm');
+      animateValue('temp', 34, demo.temp*10, 700, ' °C'); // trick: animate with *10 to allow decimals
+      // correct temp to one decimal after a short delay
+      setTimeout(()=> {
+        const tEl = document.getElementById('temp');
+        tEl.textContent = demo.temp.toFixed(1) + ' °C';
+      }, 800);
+
+      document.getElementById('lastLog').textContent = demo.lastLog;
+    });
+
+    // Optional: mock minor live fluctuation every 12s for realism
+    setInterval(() => {
+      const fluct = (Math.random()*6-3) | 0; // -3..+3
+      const newPulse = Math.max(60, (parseInt(document.getElementById('pulse').textContent) || 78) + fluct);
+      document.getElementById('pulse').textContent = newPulse + ' bpm';
+    }, 12000);
+     window.addEventListener('load', () => {
+    document.querySelectorAll('.feature-dashboard rect').forEach((rect, i) => {
+      setTimeout(() => {
+        rect.style.transform = 'scaleY(1)';
+      }, 200 * i); // stagger animation
+    });
+  });
+  </script>
+</body>
+</html>
